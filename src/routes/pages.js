@@ -15,7 +15,8 @@ router.get("/login", (req, res) => {
 })
 
 router.get("/register", (req, res) => {
-    res.render('register');
+    const message = '';
+    res.render('register', {message});
 });
 
 module.exports = router;
