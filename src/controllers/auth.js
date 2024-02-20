@@ -1,5 +1,8 @@
 
 const pool = require('../database/connection');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
 
 const register = (req, res) => {
     console.log(req.body);
@@ -14,10 +17,10 @@ const register = (req, res) => {
             return res.status(500).send('Erro ao conectar ao banco de dados');
         }
 
-        pool.query('SELECT email FROM users WHERE email = ?', [email], (error, results) => {
+        pool.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
             if (error) {
                 console.log('[____HOUVE UM ERRO____]: ', error);
-                connection.release();
+                connection  .release();
                 return res.status(500).send('Erro ao executar a consulta');
             }
 
@@ -33,6 +36,11 @@ const register = (req, res) => {
                 });
             }
 
+            let hashedPassword = await bcrypt.hash(password, 8);
+            console.log(hashedPassword);
+
+
+
             // Se chegou aqui, não houve erros e a conexão pode ser liberada
             connection.release();
 
@@ -41,8 +49,8 @@ const register = (req, res) => {
 
 
     //res.send('[FORM SUBMITTED]')
-}
+};
 
 module.exports = {
     register,
-}
+};
