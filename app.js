@@ -5,7 +5,6 @@ const pool = require('./src/database/connection');
 const authRoutes = require('./src/routes/auth');
 const pageRoutes = require('./src/routes/pages');
 const bodyParser = require("body-parser");
-const register = require('./src/controllers/auth');
 
 //Conexão com a base de dados
 pool.getConnection((error, connection) => {
@@ -16,7 +15,7 @@ pool.getConnection((error, connection) => {
     }
 });
 
-const publicDirectory = path.join(__dirname, './public');
+const publicDirectory = path.join(__dirname, '/public');
 //app.use(express.static(publicDirectory));
 app.use('/public', express.static(publicDirectory, {
     setHeaders: (res, path, stat) => {

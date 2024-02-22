@@ -16,7 +16,10 @@ router.get("/login", (req, res) => {
 
 router.get("/register", (req, res) => {
     const message = '';
-    res.render('register', {message});
+    const icon = '';
+    const title = '';
+    //const timer = 1500;
+    res.render('register', {message, icon, title});
 });
 
 module.exports = router;

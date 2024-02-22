@@ -8,7 +8,8 @@ const register = (req, res) => {
     console.log(req.body);
 
     //Pegando os dados do formulário
-    const { name, email, password, passConfirm } = req.body;
+    const { email, name, password, passConfirm } = req.body;
+    let use_type = 'user';
 
     //Chamando conexão e rodando um SELECT
     pool.getConnection((error, connection) => {
@@ -28,17 +29,41 @@ const register = (req, res) => {
                 connection.release();
                 return res.render('register', {
                     message: '[___O EMAIL JA ESTÁ EM USO___]',
+                    icon: 'error',
+                    title: 'ERRO'
                 });
             } else if (password !== passConfirm) {
                 connection.release();
                 return res.render('register', {
                     message: '[___PASSWORDS NÃO SÃO IGUAIS___]',
+                    icon: 'error',
+                    title: 'ERRO'
                 });
             }
 
+            //Criptografando a senha
             let hashedPassword = await bcrypt.hash(password, 8);
             console.log(hashedPassword);
 
+            //Insert na table users
+            pool.query('INSERT INTO users SET ?', { email: name, name: name, passwordHash: hashedPassword, user_type: use_type }, (error, results) => {
+                if (error){
+                    console.log(`[HOUVE UM ERRO AO INSERIR NA BD]: ${error}`);
+                    return res.render('register', {
+                        message: '[HOUVE UM ERRO AO INSERIR NA BD]',
+                        icon: 'error',
+                        title: 'ERRO'
+                    });
+                }
+                else {
+                    console.log(results)
+                    return res.render('register', {
+                        message: '[REGISTRADO COM SUCESSO]',
+                        icon: 'success',
+                        title: 'Feito!'
+                    });
+                }
+            });
 
 
             // Se chegou aqui, não houve erros e a conexão pode ser liberada
