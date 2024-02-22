@@ -52,16 +52,16 @@
         </div>
   
         <div>
-          <button class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onclick="registerUser()"> Inscreva-se </button>
+          <button  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onclick="registerUser(e)"> Inscreva-se </button>
         </div>
       </form>
-      <% if (message) { %>
+      <% if (message && icon && title) { %>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
               Swal.fire({
-                title: 'ERRO',
+                title: '<%= title %>',
                 text: '<%= message %>',
-                icon: 'error', // Pode ser 'success', 'error', 'warning', 'info', etc.
+                icon: '<%= icon %>', // Pode ser 'success', 'error', 'warning', 'info', etc.
                 confirmButtonText: 'OK'
               }).then((resul) => {
                 if (resul.isConfirmed) {
@@ -78,8 +78,9 @@
   </div>
 
 <script>
-  function registerUser(){
-    register;
+  function registerUser(event){
+    event.preventDefault();
+    register();
     console.log(register);
   }
 </script>
