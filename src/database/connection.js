@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const { release } = require("mysql/lib/PoolConnection");
 require('dotenv').config();
 
+//Chamando as config da bd que estão no arquivo .env 
 const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
