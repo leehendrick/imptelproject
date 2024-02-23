@@ -25,6 +25,7 @@ const register = (req, res) => {
                 return res.status(500).send('Erro ao executar a consulta');
             }
 
+            //Verficando se o email introduzido ja existe na base de dados.
             if (results.length > 0) {
                 connection.release();
                 return res.render('register', {
@@ -34,6 +35,7 @@ const register = (req, res) => {
                 });
             } else if (password !== passConfirm) {
                 connection.release();
+                //Verificando a comfirmação da password.
                 return res.render('register', {
                     message: '[___PASSWORDS NÃO SÃO IGUAIS___]',
                     icon: 'error',
