@@ -5,6 +5,9 @@ const pool = require('./src/database/connection');
 const authRoutes = require('./src/routes/auth');
 const pageRoutes = require('./src/routes/pages');
 const bodyParser = require("body-parser");
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+
 
 //Conexão com a base de dados
 pool.getConnection((error, connection) => {
@@ -15,6 +18,10 @@ pool.getConnection((error, connection) => {
     }
 });
 
+const corsOptions = {
+    origin: 'https://localhost:5000',
+    credentials: true
+}
 const publicDirectory = path.join(__dirname, '/public');
 //app.use(express.static(publicDirectory));
 app.use('/public', express.static(publicDirectory, {
@@ -28,6 +35,8 @@ app.use('/public', express.static(publicDirectory, {
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors(corsOptions));
+app.use(cookieParser());
 
 
 //Configuração do ejs
