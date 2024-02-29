@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+//Chamando o index e definindo os componentes dele. 
 router.get("/", (req, res) => {
     res.render('index', {
         partials: {
@@ -18,6 +19,7 @@ router.get("/login", (req, res) => {
     res.render('login', {message, icon, title});
 })
 
+//Chamando o register e definindo os valores a ser exibido no sweetalert.
 router.get("/register", (req, res) => {
     const message = '';
     const icon = '';
