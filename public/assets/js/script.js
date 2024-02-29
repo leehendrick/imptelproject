@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createIndicators();
 })
 
-  // Adiciona transição automática a cada 5 segundos
+// Adiciona transição automática a cada 5 segundos
   setInterval(() => {
     nextSlide();
   }, 5000);
@@ -74,4 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById(collapseID).className = '';
     document.getElementById(collapseID).classList.toggle("hidden");
 }
+
+
+let setaDropdown = document.getElementById('setaDropdown');
+let opcoesDropdown = document.getElementById('opcoesDropdown');
+
+setaDropdown.addEventListener('click', () => {
+  opcoesDropdown.classList.toggle('hidden');
+});
 
