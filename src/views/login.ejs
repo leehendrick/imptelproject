@@ -11,7 +11,6 @@
   
 </head>
 <body class="h-full">
-  </script>
   <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-14 w-auto" src="/public/assets/img/IMPTEL.svg" alt="Logo Imptel">
@@ -19,7 +18,7 @@
     </div>
   
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" action="/auth/login" method="GET">
+      <form class="space-y-6" action="/auth/login" method="POST">
         <div>
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
           <div class="relative mt-2 rounded-md shadow-sm">
@@ -29,7 +28,7 @@
                 <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
               </svg>
             </div>
-            <input type="email" name="email" id="email" class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="you@example.com">
+            <input type="email" name="email" id="email" class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="you@example.com" required>
           </div>
         </div>
 
@@ -42,7 +41,7 @@
               </svg>
                             
             </div>
-            <input type="password" name="password" id="password" class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <input type="password" name="password" id="password" class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required>
           </div>
         </div>
 
@@ -50,20 +49,28 @@
           <button class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
         </div>
       </form>
-      <% if (message && icon && title) { %>
+      <% if (message && title) { %>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-      <script>
-        Swal.fire({
-          title: '<%= title %>',
-          text: '<%= message %>',
-          icon: '<%= icon %>', // Pode ser 'success', 'error', 'warning', 'info', etc.
-          confirmButtonText: 'OK'
-        }).then((resul) => {
-          if (resul.isConfirmed) {
-            console.log('Usuario clicou OK');
-          }
-        });
-      </script>
+        <script>
+
+          Swal.fire({
+            title: '<%= title %>',
+            text: '<%= message %>',
+            didOpen(popup) {
+              Swal.showLoading();
+            },
+            timer: 1000,
+          }).then(() => {
+            window.location.href = '/home';
+          });
+
+          fetch('http://localhost:5000/home', {
+            method: 'GET',
+            credentials: 'include',
+          });
+
+        </script>
+      <% } %>
       <p class="mt-10 text-center text-sm text-gray-500">
         Não tem conta?
         <a href="/register" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Criar conta</a>
