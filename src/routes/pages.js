@@ -12,7 +12,11 @@ router.get("/", (req, res) => {
 })
 
 router.get("/login", (req, res) => {
-    res.render('login');
+    const message = '';
+    const icon = '';
+    const title = '';
+    //const timer = 1500;
+    res.render('login', {message, icon, title});
 })
 
 //Chamando o register e definindo os valores a ser exibido no sweetalert.
