@@ -2,8 +2,25 @@
 const pool = require('../database/connection');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+require('dotenv').config();
 
+const generateToken = (user) => {
+    const payload = {
+        userId: user.id,
+        email: user.email,
+        name: user.name,
+        password: user.passwordHash,
+        user_type: user.user_type
+    };
 
+    const options = {
+        expiresIn: '1h',
+    }
+
+    const secretKey = process.env.JWT_SECRET;
+
+    return jwt.sign(payload, secretKey, options, { algorithm: 'HS256' });
+}
 const register = (req, res) => {
     console.log(req.body);
 
@@ -48,7 +65,7 @@ const register = (req, res) => {
             console.log(hashedPassword);
 
             //Insert na table users
-            pool.query('INSERT INTO users SET ?', { email: name, name: name, passwordHash: hashedPassword, user_type: use_type }, (error, results) => {
+            pool.query('INSERT INTO users SET ?', { email: email, name: name, passwordHash: hashedPassword, user_type: use_type }, (error, results) => {
                 if (error){
                     console.log(`[HOUVE UM ERRO AO INSERIR NA BD]: ${error}`);
                     return res.render('register', {
@@ -79,40 +96,70 @@ const register = (req, res) => {
 };
 
 const login = (req, res) => {
-    const {email, password} = req.body;
-    console.log(req.body)
+    const { email, password } = req.body;
 
-    pool.getConnection((error, connection) =>{
+    pool.getConnection((error, connection) => {
         if (error) {
             console.log('[____HOUVE UM ERRO AO CONECTAR A B.D____]: ', error);
             return res.status(500).send('Erro ao conectar ao banco de dados');
         }
-        else {
-            pool.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
-                if (error) {
-                    console.log('[____HOUVE UM ERRO____]: ', error);
-                    connection  .release();
-                    return res.status(500).send('Erro ao executar a consulta');
+
+        // Consulta para obter o usuário pelo e-mail
+        pool.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
+            if (error) {
+                console.log('[____HOUVE UM ERRO____]: ', error);
+                connection.release();
+                return res.status(500).send('Erro ao executar a consulta');
+            }
+
+            if (results.length <= 0) {
+                connection.release();
+                return res.render('login', {
+                    message: 'Usuário não encontrado',
+                    icon: 'error',
+                    title: 'Erro no Login'
+                });
+            }
+
+            const user = results[0];
+
+            // Comparar a senha digitada com a senha armazenada no banco de dados
+            bcrypt.compare(password, user.passwordHash, (err, isMatch) => {
+                if (err) {
+                    console.log('[____HOUVE UM ERRO AO COMPARAR SENHAS____]: ', err);
+                    connection.release();
+                    return res.status(500).send('Erro ao comparar senhas');
                 }
 
-                if (results.length > 0) {
+                if (isMatch) {
+                    connection.release();
+                    const token = generateToken(user);
+
+                    res.cookie('token', token, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV === 'production',
+                    });
+                    const user_name = user.name;
+                    console.log(user_name)
+
+                    return res.render('login', {
+                        message: 'Por Favor aguarde...',
+                        title: 'Processando!',
+                    });
+
+                } else {
                     connection.release();
                     return res.render('login', {
-                        message: '[___LOGIN BEM SUCEDIDO___]',
-                        icon: 'sucess',
-                        title: 'SUCESSO!'
+                        message: 'Senha incorreta',
+                        icon: 'error',
+                        title: 'Erro no Login'
                     });
                 }
-
-
-                // Se chegou aqui, não houve erros e a conexão pode ser liberada
-                connection.release();
-
             });
-
-        }
+        });
     });
 };
+
 
 module.exports = {
     register,
