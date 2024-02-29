@@ -25,6 +25,7 @@ const register = (req, res) => {
                 return res.status(500).send('Erro ao executar a consulta');
             }
 
+            //Verficando se o email introduzido ja existe na base de dados.
             if (results.length > 0) {
                 connection.release();
                 return res.render('register', {
@@ -34,6 +35,7 @@ const register = (req, res) => {
                 });
             } else if (password !== passConfirm) {
                 connection.release();
+                //Verificando a comfirmação da password.
                 return res.render('register', {
                     message: '[___PASSWORDS NÃO SÃO IGUAIS___]',
                     icon: 'error',
@@ -76,6 +78,43 @@ const register = (req, res) => {
     //res.send('[FORM SUBMITTED]')
 };
 
+const login = (req, res) => {
+    const {email, password} = req.body;
+    console.log(req.body)
+
+    pool.getConnection((error, connection) =>{
+        if (error) {
+            console.log('[____HOUVE UM ERRO AO CONECTAR A B.D____]: ', error);
+            return res.status(500).send('Erro ao conectar ao banco de dados');
+        }
+        else {
+            pool.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
+                if (error) {
+                    console.log('[____HOUVE UM ERRO____]: ', error);
+                    connection  .release();
+                    return res.status(500).send('Erro ao executar a consulta');
+                }
+
+                if (results.length > 0) {
+                    connection.release();
+                    return res.render('login', {
+                        message: '[___LOGIN BEM SUCEDIDO___]',
+                        icon: 'sucess',
+                        title: 'SUCESSO!'
+                    });
+                }
+
+
+                // Se chegou aqui, não houve erros e a conexão pode ser liberada
+                connection.release();
+
+            });
+
+        }
+    });
+};
+
 module.exports = {
     register,
+    login
 };

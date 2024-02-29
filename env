@@ -1,0 +1,6 @@
+DB_HOST=adiciona aqui o host
+DB_USER=adiciona aqui o user da bd
+DB_PASS=adiciona aqui a password da bd se tiver
+DB_NAME=adiciona aqui o nome da bd
+
+<!--Salve este arquivo como .env->
