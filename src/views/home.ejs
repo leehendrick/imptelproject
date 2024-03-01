@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/public/assets/js/script.js" defer></script>
+
+</head>
+<body class="h-full">
+<%- include('Partials/navbar.ejs')%>
+
+
+<script>
+  fetch('http://localhost:5000/home', {
+    method: 'GET',
+    credentials: 'include', // Permitir cookies em solicitações CORS
+  });
+</script>
+</body>
+</html>
