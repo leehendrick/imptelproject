@@ -4,12 +4,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
-const generateToken = (user) => {
+
+
+const  generateToken = (user) => {
+
     const payload = {
         userId: user.id,
         email: user.email,
         name: user.name,
-        password: user.passwordHash,
         user_type: user.user_type
     };
 
@@ -21,6 +23,7 @@ const generateToken = (user) => {
 
     return jwt.sign(payload, secretKey, options, { algorithm: 'HS256' });
 }
+
 const register = (req, res) => {
     console.log(req.body);
 
@@ -139,12 +142,11 @@ const login = (req, res) => {
                         httpOnly: true,
                         secure: process.env.NODE_ENV === 'production',
                     });
-                    const user_name = user.name;
-                    console.log(user_name)
 
                     return res.render('login', {
                         message: 'Por Favor aguarde...',
                         title: 'Processando!',
+                        usuario: user.name,
                     });
 
                 } else {
@@ -160,8 +162,18 @@ const login = (req, res) => {
     });
 };
 
+const logout = (req, res) => {
+    res.clearCookie('token');
+    res.setHeader('Content-Type', 'text/html');
+    res.render('login', {
+        message: '',
+        title: '',
+        usuario: ''
+    })
+};
 
 module.exports = {
     register,
-    login
+    login,
+    logout
 };
