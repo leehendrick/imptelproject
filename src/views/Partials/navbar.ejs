@@ -43,7 +43,7 @@
                     <div class=" mt-10 mr-5 hidden absolute top-12 right-0 bg-white p-2 shadow-md" id="opcoesDropdown">
                         <ul>
                             <li><a href="/perfil" class="block px-4 py-2 text-gray-800">Ver Perfil</a></li>
-                            <li><a href="/logout" class="block px-4 py-2 text-gray-800">Logout</a></li>
+                            <li><button class="block px-4 py-2 text-gray-800" onclick="logOut()">Logout</button></li>
                         </ul>
                     </div>
                 </div>
@@ -86,4 +86,23 @@
 <script>
     const user = sessionStorage.getItem('user_name');
     document.querySelector('#user_name').textContent = `${user}`;
+
+    function logOut(){
+        fetch('/auth/logout', {
+            method: 'POST',
+            credentials: 'same-origin',
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Handle successful logout
+                    window.location.href = '/login';
+                } else {
+                    // Handle error or unexpected response
+                    console.error('Logout failed:', response.statusText);
+                }
+            })
+            .catch(error => console.error('Logout failed:', error));
+
+    }
+
 </script>
