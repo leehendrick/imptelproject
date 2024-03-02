@@ -58,7 +58,7 @@
             didOpen(popup) {
               Swal.showLoading();
             },
-            timer: 1000,
+            timer: 500,
           }).then(() => {
             sessionStorage.setItem('user_name', '<%= usuario %>');
             window.location.href = '/home';
