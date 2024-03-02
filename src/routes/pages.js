@@ -14,21 +14,17 @@ router.get("/", (req, res) => {
 })
 
 router.get("/login", (req, res) => {
-    const message = '';
-    const icon = '';
-    const title = '';
-    const usuario = '';
+    const { message, icon, title, usuario} = '';
     //const timer = 1500;
-    res.render('login', { message, icon, title, usuario });
+    res.render('login', { message, icon, title, usuario});
 })
 
 //Chamando o register e definindo os valores a ser exibido no sweetalert.
 router.get("/register", (req, res) => {
-    const message = '';
-    const icon = '';
-    const title = '';
+    const { message, icon, title, userValid, emailValid, passValid} = '';
+
     //const timer = 1500;
-    res.render('register', {message, icon, title});
+    res.render('register', {message, icon, title, userValid, emailValid, passValid});
 });
 
 router.get('/home', verifyToken, (req, res) =>{
