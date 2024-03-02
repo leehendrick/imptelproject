@@ -3,9 +3,25 @@ const pool = require('../database/connection');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
+const _ = require('lodash');
 
+function validateForm(username, email, password){
+    const err = [];
 
+    if (!/^[a-zA-Z ]+$/.test(username)){
+        err.username = 'Nome inválido. Use apenas letras.' || [];
+    }
 
+    if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)){
+        err.email = 'Email inválido.' || [];
+    }
+
+    if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)){
+        err.password = 'Password Inválida. Deve ter 6 caracteres minímo.' || [];
+    }
+
+    return err;
+}
 const  generateToken = (user) => {
 
     const payload = {
@@ -31,6 +47,14 @@ const register = (req, res) => {
     const { email, name, password, passConfirm } = req.body;
     let use_type = 'user';
 
+    const validate = validateForm(name, email, password);
+
+    console.log(validate.username)
+    console.log(validate.email)
+    console.log(validate.password)
+
+    if (validate.username === undefined && validate.email === undefined && validate.password === undefined){
+
     //Chamando conexão e rodando um SELECT
     pool.getConnection((error, connection) => {
         if (error) {
@@ -51,7 +75,10 @@ const register = (req, res) => {
                 return res.render('register', {
                     message: '[___O EMAIL JA ESTÁ EM USO___]',
                     icon: 'error',
-                    title: 'ERRO'
+                    title: 'ERRO',
+                    userValid: '',
+                    emailValid: '',
+                    passValid: '',
                 });
             } else if (password !== passConfirm) {
                 connection.release();
@@ -59,7 +86,10 @@ const register = (req, res) => {
                 return res.render('register', {
                     message: '[___PASSWORDS NÃO SÃO IGUAIS___]',
                     icon: 'error',
-                    title: 'ERRO'
+                    title: 'ERRO',
+                    userValid: '',
+                    emailValid: '',
+                    passValid: '',
                 });
             }
 
@@ -72,9 +102,12 @@ const register = (req, res) => {
                 if (error){
                     console.log(`[HOUVE UM ERRO AO INSERIR NA BD]: ${error}`);
                     return res.render('register', {
-                        message: '[HOUVE UM ERRO AO INSERIR NA BD]',
+                        message: '[HOUVE UM ERRO AO FAZER REGISTRO]',
                         icon: 'error',
-                        title: 'ERRO'
+                        title: 'ERRO',
+                        userValid: '',
+                        emailValid: '',
+                        passValid: '',
                     });
                 }
                 else {
@@ -82,7 +115,10 @@ const register = (req, res) => {
                     return res.render('register', {
                         message: '[REGISTRADO COM SUCESSO]',
                         icon: 'success',
-                        title: 'Feito!'
+                        title: 'Feito!',
+                        userValid: '',
+                        emailValid: '',
+                        passValid: '',
                     });
                 }
             });
@@ -93,8 +129,18 @@ const register = (req, res) => {
 
         });
     });
-
-
+    }
+    else{
+        res.render('register', {
+            userValid: validate.username,
+            emailValid: validate.email,
+            passValid: validate.password,
+            message: '',
+            title: '',
+            icon: '',
+            usuario: ''
+        })
+    }
     //res.send('[FORM SUBMITTED]')
 };
 
