@@ -56,7 +56,7 @@ const register = (req, res) => {
     if (validate.username === undefined && validate.email === undefined && validate.password === undefined){
 
     //Chamando conexão e rodando um SELECT
-    pool.getConnection((error, connection) => {
+    pool.getConnection((error, connection) =>   {
         if (error) {
             console.log('[____HOUVE UM ERRO AO CONECTAR A B.D____]: ', error);
             return res.status(500).send('Erro ao conectar ao banco de dados');
@@ -183,7 +183,7 @@ const login = (req, res) => {
                 if (isMatch) {
                     connection.release();
                     const token = generateToken(user);
-
+                    console.log(token);
                     res.cookie('token', token, {
                         httpOnly: true,
                         secure: process.env.NODE_ENV === 'production',
@@ -200,7 +200,8 @@ const login = (req, res) => {
                     return res.render('login', {
                         message: 'Senha incorreta',
                         icon: 'error',
-                        title: 'Erro no Login'
+                        title: 'Erro no Login',
+                        usuario: ''
                     });
                 }
             });
