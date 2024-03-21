@@ -84,6 +84,7 @@
     </div>
 </header>
 <script>
+
     const user = sessionStorage.getItem('user_name');
     document.querySelector('#user_name').textContent = `${user}`;
 
@@ -94,10 +95,10 @@
         })
             .then(response => {
                 if (response.ok) {
-                    // Handle successful logout
+
                     window.location.href = '/login';
                 } else {
-                    // Handle error or unexpected response
+
                     console.error('Logout failed:', response.statusText);
                 }
             })
