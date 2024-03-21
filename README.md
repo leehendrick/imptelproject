@@ -20,7 +20,7 @@ ImptelConnect is a comprehensive school website designed to integrate an online 
 * Seamless Communication: Facilitate seamless communication between students, teachers, and staff, offering features such as messaging, video conferencing, and announcements to ensure effective collaboration and support, even at a distance.
 ## Installation
 
-Provide instructions on how to install the project locally. Include any dependencies that need to be installed and any setup steps required before running the project.
+For the installation to work as expected you need to have the latest version of nodejs and npm installed 
 
 ```bash
 # Clone the repository
