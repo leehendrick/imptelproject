@@ -6,6 +6,7 @@ ImptelConnect is a comprehensive school website designed to integrate an online 
 
 - [About](#about)
 - [Installation](#installation)
+- [License](#license)
 
 ## About
 * Online School Secretary : Streamline administrative tasks with an intuitive online secretary, allowing staff to manage schedules, student records, and other essential administrative functions efficiently.
@@ -30,3 +31,8 @@ cd imptelproject
 
 # Install dependencies
 npm install
+
+```
+
+## License
+ImptelConnect is licensed under the [MIT license](https://opensource.org/licenses/MIT), empowering users with the freedom to use, modify, and distribute the software for any purpose, subject to the terms of the license agreement.
