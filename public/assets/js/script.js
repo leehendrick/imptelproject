@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
     nextSlide();
   }, 5000);
 
-
   function toggleNavbar(collapseID){
       document.getElementById(collapseID).className = '';
       document.getElementById(collapseID).classList.toggle("lg:hidden");
